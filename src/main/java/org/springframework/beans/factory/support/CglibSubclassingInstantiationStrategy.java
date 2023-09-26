@@ -2,8 +2,11 @@ package org.springframework.beans.factory.support;
 
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
+
+import java.lang.reflect.Method;
 
 /**
  * @author derekyi
@@ -23,6 +26,16 @@ public class CglibSubclassingInstantiationStrategy implements InstantiationStrat
 		Enhancer enhancer = new Enhancer();
 		enhancer.setSuperclass(beanDefinition.getBeanClass());
 		enhancer.setCallback((MethodInterceptor) (obj, method, argsTemp, proxy) -> proxy.invokeSuper(obj,argsTemp));
+
+		// 非lamdba写法
+		/*
+		enhancer.setCallback(new MethodInterceptor() {
+			@Override
+			public Object intercept(Object obj, Method method, Object[] argsTemp, MethodProxy methodProxy) throws Throwable {
+				return methodProxy.invokeSuper(obj,argsTemp);
+			}
+		});
+		*/
 		return enhancer.create();
 	}
 }
