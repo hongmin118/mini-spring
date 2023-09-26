@@ -22,8 +22,13 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 	public Object instantiate(BeanDefinition beanDefinition) throws BeansException {
 		Class beanClass = beanDefinition.getBeanClass();
 		try {
+			// beanClass.newInstance();
+
+			// Constructor constructor = beanClass.getConstructor();
+
 			Constructor constructor = beanClass.getDeclaredConstructor();
 			return constructor.newInstance();
+
 		} catch (Exception e) {
 			throw new BeansException("Failed to instantiate [" + beanClass.getName() + "]", e);
 		}
